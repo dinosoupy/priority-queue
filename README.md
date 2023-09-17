@@ -7,6 +7,6 @@ This is an implementation of a priority queue using a max-heap from scratch. It 
 I plan to add the following features:
 - [ ] Implement `heapify()` to construct heap from existing array
 - [ ] Error handling for overflow/underflow during heap operations
-
+- [ ] Add min-heap support
 
 
