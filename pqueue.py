@@ -1,61 +1,87 @@
+# Copyright (c) 2023 Anish Basu
+# This code is licensed under the MIT License.
+
 class PriorityQueue:
+    """
+    This class implements a priority queue using a heap data structure.
+    """
 
-	def __init__(self):
-		self.queue = []
+    def __init__(self):
+        """
+        Initializes an empty priority queue.
+        """
+        self.queue = []
 
-	def enqueue(self, item):
-		# print(f"enqueueing {item}")
-		self.queue.append(item)
-		self.siftUp(len(self.queue)-1)
+    def enqueue(self, item):
+        """
+        Inserts an item into the priority queue.
 
-	def dequeue(self):
-		
-		if len(self.queue) == 0:
-			return None
-		if len(self.queue) == 1:
-			root = self.queue.pop()
-			# print(f"dequeueing {root}")
-			return root
+        Args:
+            item: A tuple representing (priority, data).
+        """
+        self.queue.append(item)
+        self.siftUp(len(self.queue)-1)
 
+    def dequeue(self):
+        """
+        Removes and returns the item with the highest priority from the queue.
+        Returns None if the queue is empty.
 
-		root = self.queue[0]
-		self.queue[0] = self.queue.pop()
-		self.siftDown(0)
-		# print(f"dequeueing {root}")
-		return root
+        Returns:
+            A tuple representing (priority, data).
+        """
+        if len(self.queue) == 0:
+            return None
+        if len(self.queue) == 1:
+            return self.queue.pop()
 
-	def peek(self):
+        root = self.queue[0]
+        self.queue[0] = self.queue.pop()
+        self.siftDown(0)
+        return root
 
-		if len(self.queue) == 0:
-			return None
-		else:
-			# print(f"peeking {self.queue[0]}")
-			return self.queue[0]
+    def peek(self):
+        """
+        Returns the item with the highest priority without removing it from the queue.
+        Returns None if the queue is empty.
 
-	def add_wait(self):
-		for i in range(len(self.queue)):
-			priority, arrival_time, service_time = self.queue[i]
-			self.queue[i] = (priority, arrival_time + 0.1, service_time)
+        Returns:
+            A tuple representing (priority, data).
+        """
+        if len(self.queue) == 0:
+            return None
+        else:
+            return self.queue[0]
 
-	def siftUp(self, index):
-		parent = (index - 1) // 2
-		if index > 0 and self.queue[parent][0] < self.queue[index][0]:
-			self.queue[parent], self.queue[index] = self.queue[index], self.queue[parent]
-			self.siftUp(parent)
-		return
+    def siftUp(self, index):
+        """
+        Moves the item at index up the heap to maintain the heap property.
 
-	def siftDown(self, index):
-		left = 2 * index + 1
-		right = 2 * index + 2
-		largest = index
+        Args:
+            index: The index of the item to be moved up.
+        """
+        parent = (index - 1) // 2
+        if index > 0 and self.queue[parent][0] < self.queue[index][0]:
+            self.queue[parent], self.queue[index] = self.queue[index], self.queue[parent]
+            self.siftUp(parent)
 
-		if left < len(self.queue) and self.queue[left][0] > self.queue[largest][0]:
-			largest = left
-		if right < len(self.queue) and self.queue[right][0] > self.queue[largest][0]:
-			largest = right
+    def siftDown(self, index):
+        """
+        Moves the item at index down the heap to maintain the heap property.
 
-		if largest != index:
-			self.queue[largest], self.queue[index] = self.queue[index], self.queue[largest]
-			self.siftDown(largest)
+        Args:
+            index: The index of the item to be moved down.
+        """
+        left = 2 * index + 1
+        right = 2 * index + 2
+        largest = index
 
-		return
+        if left < len(self.queue) and self.queue[left][0] > self.queue[largest][0]:
+            largest = left
+        if right < len(self.queue) and self.queue[right][0] > self.queue[largest][0]:
+            largest = right
+
+        if largest != index:
+            self.queue[largest], self.queue[index] = self.queue[index], self.queue[largest]
+            self.siftDown(largest)
+

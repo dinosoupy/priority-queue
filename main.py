@@ -1,61 +1,32 @@
-class PriorityQueue:
+import unittest
+from pqueue import PriorityQueue
 
-	def __init__(self):
-		self.queue = []
+class TestPriorityQueue(unittest.TestCase):
 
-	def enqueue(self, item):
-		# print(f"enqueueing {item}")
-		self.queue.append(item)
-		self.siftUp(len(self.queue)-1)
+    def test_enqueue(self):
+        pq = PriorityQueue()
+        pq.enqueue((3, 1, 2))
+        pq.enqueue((1, 2, 3))
+        pq.enqueue((2, 3, 4))
 
-	def dequeue(self):
-		
-		if len(self.queue) == 0:
-			return None
-		if len(self.queue) == 1:
-			root = self.queue.pop()
-			# print(f"dequeueing {root}")
-			return root
+        self.assertEqual(pq.queue, [(3, 1, 2), (1, 2, 3), (2, 3, 4)])
 
+    def test_dequeue(self):
+        pq = PriorityQueue()
+        pq.enqueue((3, 1, 2))
+        pq.enqueue((1, 2, 3))
+        pq.enqueue((2, 3, 4))
 
-		root = self.queue[0]
-		self.queue[0] = self.queue.pop()
-		self.siftDown(0)
-		# print(f"dequeueing {root}")
-		return root
+        self.assertEqual(pq.dequeue(), (3, 1, 2))
+        self.assertEqual(pq.dequeue(), (2, 3, 4))
 
-	def peek(self):
+    def test_peek(self):
+        pq = PriorityQueue()
+        pq.enqueue((3, 1, 2))
+        pq.enqueue((1, 2, 3))
+        pq.enqueue((2, 3, 4))
 
-		if len(self.queue) == 0:
-			return None
-		else:
-			# print(f"peeking {self.queue[0]}")
-			return self.queue[0]
+        self.assertEqual(pq.peek(), (3, 1, 2))
 
-	def add_wait(self):
-		for i in range(len(self.queue)):
-			priority, arrival_time, service_time = self.queue[i]
-			self.queue[i] = (priority, arrival_time + 0.1, service_time)
-
-	def siftUp(self, index):
-		parent = (index - 1) // 2
-		if index > 0 and self.queue[parent][0] < self.queue[index][0]:
-			self.queue[parent], self.queue[index] = self.queue[index], self.queue[parent]
-			self.siftUp(parent)
-		return
-
-	def siftDown(self, index):
-		left = 2 * index + 1
-		right = 2 * index + 2
-		largest = index
-
-		if left < len(self.queue) and self.queue[left][0] > self.queue[largest][0]:
-			largest = left
-		if right < len(self.queue) and self.queue[right][0] > self.queue[largest][0]:
-			largest = right
-
-		if largest != index:
-			self.queue[largest], self.queue[index] = self.queue[index], self.queue[largest]
-			self.siftDown(largest)
-
-		return
+if __name__ == '__main__':
+    unittest.main()
